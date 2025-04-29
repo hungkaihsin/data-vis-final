@@ -12,6 +12,11 @@ data = pd.read_csv('src/netflix_titles.csv')
 fill_missing_val = ['director', 'cast', 'country', 'duration']
 for col in fill_missing_val:
     data[col] = data[col].fillna('Unknown')
+    
+data['date_added'] = pd.to_datetime(data['date_added'], errors='coerce')
+data['year_added'] = data['date_added'].dt.year
+
+data = data.dropna(subset=['year_added'])
 data = data.dropna(subset=['date_added'])
 data['rating'] = data['rating'].fillna(data['rating'].mode()[0])
 
@@ -99,3 +104,40 @@ fig2.update_layout(
 # Display second graph
 st.subheader("Top 10 Countries Producing Netflix Content")
 st.plotly_chart(fig2)
+
+
+
+# third graph
+movies_per_year = movies['year_added'].value_counts().sort_index()
+tv_shows_per_year = tv_shows['year_added'].value_counts().sort_index()
+
+fig3 = go.Figure()
+
+# Movies
+fig3.add_trace(go.Scatter(x=movies_per_year.index, y=movies_per_year.values, mode='lines + markers', name='Movies'))
+# TV shows
+fig3.add_trace(go.Scatter(x=tv_shows_per_year.index, y=tv_shows_per_year.values, mode='lines + markers', name='TV shows'))
+
+fig3.update_layout(
+    title='Number of Titles Added to Netflix Over Years',
+    xaxis_title='Year',
+    yaxis_title='Number of Titles',
+    updatemenus=[
+        dict(
+            active = 0,
+            buttons=list([
+                dict(label="All", method="update", args=[{"visible": [True, True]}, {"title": "Number of Titles Added to Netflix Over Years"}]),
+                dict(label="Movies", method="update", args=[{"visible": [True, False]}, {"title": "Number of Movies Added to Netflix Over Years"}]),
+                dict(label="TV Shows", method="update", args=[{"visible": [False, True]}, {"title": "Number of TV Shows Added to Netflix Over Years"}]),
+            ]),
+            direction='down',
+            showactive=True,
+            x=0.9,
+            y=1.2,
+            font = dict(size = 14)
+        )
+    ]
+)
+
+st.subheader("Number of Titles Added to Netflix Over Years")
+st.plotly_chart(fig3)
