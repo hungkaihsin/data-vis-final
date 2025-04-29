@@ -10,7 +10,7 @@ st.title("Netflix Data Visualization Dashboard")
 # Sidebar
 option = st.sidebar.selectbox(
     "Select a visualization:",
-    ("Distribution of Type", "Top 10 Contries Producing Netflix Content", "Titles Added Over Years")
+    ("Distribution of Movie vs TV Show", "Top 10 Contries Producing Netflix", "Producting Added Over Years")
 )
 
 
@@ -33,7 +33,7 @@ movies = data[data['type'] == 'Movie']
 tv_shows = data[data['type'] == 'TV Show']
 # First Graph: Distribution of Type
 
-if option ==  "Distribution of Type":
+if option ==  "Distribution of Movie vs TV Show":
     type_counts = data['type'].value_counts()
 
     fig1 = go.Figure()
@@ -48,19 +48,20 @@ if option ==  "Distribution of Type":
     )
 
     # Display first graph
-    st.subheader("Distribution of Type (Movie vs TV Show)")
+    st.subheader("Distribution of Movie vs TV Show")
     col1, col2 = st.columns([2, 1])
     with col1:
         st.plotly_chart(fig1, use_container_width=True)
     
     with col2:
         st.markdown('''
-        ### Insight:
-                    
+        ### Insights:
+         -  Movies outnumber TV shows on Netflix, with over **6,000 movies compared to fewer than 3,000 TV shows**.
+         -  Movies may dominate due to **shorter production cycles** and broader international appeal.
                     ''')    
 
 
-elif option == "Top 10 Contries Producing Netflix Content":
+elif option == "Top 10 Contries Producing Netflix":
 # Second Graph: Top 10 Countries
     movies_country_counts = movies['country'].value_counts().head(10).drop('Unknown', errors='ignore')
     tv_shows_country_counts = tv_shows['country'].value_counts().head(10).drop('Unknown', errors='ignore')
@@ -114,7 +115,7 @@ elif option == "Top 10 Contries Producing Netflix Content":
                 font = dict(size = 14)
             )
         ],
-        xaxis_title="Number of Titles",
+        xaxis_title="Number of Producing",
         yaxis_title="Country",
         height=600
     )
@@ -133,7 +134,7 @@ elif option == "Top 10 Contries Producing Netflix Content":
             
         ''')
 
-elif option == 'Titles Added Over Years':
+elif option == 'Producting Added Over Years':
 
 # third graph
     movies_per_year = movies['year_added'].value_counts().sort_index()
@@ -148,7 +149,7 @@ elif option == 'Titles Added Over Years':
 
     fig3.update_layout(
         xaxis_title='Year',
-        yaxis_title='Number of Titles',
+        yaxis_title='Number of Producing',
         updatemenus=[
             dict(
                 active = 0,
@@ -166,7 +167,7 @@ elif option == 'Titles Added Over Years':
         ]
     )
 
-    st.subheader("Number of Titles Added to Netflix Over Years")
+    st.subheader("Producting Added to Netflix Over Years")
     col1, col2 = st.columns([2, 1])
     with col1:
         st.plotly_chart(fig3, use_container_width=True)
@@ -176,7 +177,5 @@ elif option == 'Titles Added Over Years':
         - Rapid growth from **2016 to 2019**, possibly due to global expansion.
         - **2020 shows a dip**, likely related to the COVID-19 pandemic's production delays.
         - TV shows and movies follow similar trends but differ in volume.            
-                    
-                    
                     ''')
 
