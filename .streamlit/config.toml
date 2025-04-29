@@ -1,0 +1,9 @@
+[theme]
+primaryColor = "#FF4B4B"  # red accent (you can change this)
+backgroundColor = "#F5F5F5"  # soft light grey (a.k.a. dark white)
+secondaryBackgroundColor = "#E0E0E0"  # light grey for sidebar/cards
+textColor = "#1C1C1C"  # dark grey text
+font = "sans serif"
+
+[layout]
+wide = true
